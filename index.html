@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Strategies Backtesting</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    .body1 {
+      margin: 0;
+      padding: 0;
+      background-image: url('pexels-pixabay-302769.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .btn-custom {
+      background-color: #ffc107;
+      color: black;
+      font-weight: bold;
+      padding: 20px 30px;
+      border: none;
+      border-radius: 25px;
+      text-transform: uppercase;
+    }
+    .btn-custom:hover {
+      background-color: #e0a800;
+    }
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      width: 75%;
+    }
+    h2 {
+      font-size: 4rem;
+      color: #ffc107;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+      width: 60%;
+    }
+
+    .challenge-section {
+      background-color: black;
+      color: white;
+      text-align: center;
+    }
+    .challenge-section h2 {
+      color: #ffc107;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    .challenge-section p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 47%;
+    }
+    .challenge-section .highlight {
+      font-weight: bold;
+      color: white;
+    }
+
+    .backtesting-section {
+      padding: 50px 20px;
+      background-color: white;
+
+    }
+    .backtesting-section h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+    .backtesting-section h2 span {
+      color: #ffc107;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      
+    }
+    .feature-icon {
+        width: 100px; /* Adjust the size as needed */
+        height: 100px; /* Adjust the size as needed */
+        margin-right: 15px;
+    }
+    .feature-text {
+      font-size: 1.2rem;
+      color: black;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .image-grid  {
+      border-radius: 10px;
+      height: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .image-grid img {
+      border-radius: 20px;
+      width: 100%;
+      height: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+    .bottom-text {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 30px;
+      font-size: 1.1rem;
+      color: black;
+    }
+
+    .how-it-works-section {
+      background-color: black;
+      color: white;
+      padding: 100px 20px;
+      text-align: center;
+    }
+    .how-it-works-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+    }
+    .how-it-works-section h2 span {
+      color: #ffaa00;
+    }
+    .step-card {
+      background-color: white;
+      color: black;
+      padding: 10px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .step-card:hover {
+      transform: translateY(-10px);
+    }
+    .step-number {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .step-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .step-description {
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    .expert-section {
+      padding: 120px 20px;
+      background-color: white;
+      color: #000;
+    }
+    .expert-section h2 {
+      font-size: 2.9rem;
+      margin-bottom: 20px;
+    }
+    .expert-section h2 span {
+      color: #ffaa00; /* Highlight color for 'Expert' */
+    }
+    .expert-section p {
+      font-size: 1.2rem;
+      line-height: 1.8;
+    }
+    .expert-image {
+      border-radius: 25px;
+      border: 3px solid #ffaa00; /* Orange border */
+    }
+
+    .skip-backtesting-section {
+      background-color: black;
+      color: white;
+      padding: 150px 20px;
+    }
+    .skip-backtesting-section h2 {
+      font-size: 3.5rem;
+      margin-bottom: 0px;
+    }
+    .skip-backtesting-section h2 span {
+      color: #ffaa00; /* Highlight color */
+    }
+    .highlight {
+      font-weight: bold;
+      color: #ffaa00;
+    }
+    .cta-button {
+      background-color: #ffaa00;
+      color: black;
+      font-weight: bold;
+      padding: 25px 60px;
+      border: none;
+      border-radius: 25px;
+      text-transform: uppercase;
+      transition: background-color 0.3s ease;
+    }
+    .cta-button:hover {
+      background-color: #e09900;
+    }
+    .skip-backtesting-text {
+      font-size: 1.2rem;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container-fluid d-flex align-items-center justify-content-center body1">
+    <div class="content">
+      <h1>Turn Your Trading Ideas Into Proven Strategies With Professional</h1>
+      <h2> Backtesting</h2>
+      <p>
+        <strong>No coding?</strong> No problem. I’ll handle the backtesting, data
+        management, and cloud infrastructure so you can trade smarter, not
+        harder.
+      </p>
+      <a href="#" class="btn btn-custom">Book Your Free Discovery Call</a>
+    </div>
+  </div>
+
+  <section class="challenge-section">
+    <div class="container py-5">
+      <h2><span style="color: white;">The</span> <span style="color: #ffc107;">Challenge</span></h2>
+      <p>
+        As a trader, you know the importance of testing your strategies before
+        going live. But let’s face it—coding, managing datasets, and running
+        backtests aren’t what you signed up for. Most tools on the market are
+        clunky, outdated, and not professional-grade.
+      </p>
+      <p class="highlight mt-5">That’s where I come in.</p>
+    </div>
+  </section>
+
+
+  <section class="backtesting-section">
+    <div class="container">
+      <!-- Heading -->
+      <h2 class="text-start">
+        <span style="color: black;">Professional Backtesting. Made for Retail</span> <span>Traders</span>
+      </h2>
+
+      <div class="row">
+        <!-- Features List -->
+        <div class="col-md-6">
+            <div class="feature">
+                <img class="feature-icon" src="l1.png" alt="Custom-coded backtests icon">
+                <p class="feature-text">Custom-coded backtests tailored to your strategies.</p>
+            </div>
+            <hr style="color: #ffaa00; height: 2px; background-color: #ffaa00; border: none;">
+        <div class="feature">
+            <img class="feature-icon" src="l2.png" alt="Custom-coded backtests icon">
+            <p class="feature-text">Accurate, institutional-grade data and analytics.</p>
+          </div>
+          <hr style="color: #ffaa00; height: 2px; background-color: #ffaa00; border: none;">
+          <div class="feature">
+            <img class="feature-icon" src="l3.png" alt="Custom-coded backtests icon">
+            <p class="feature-text">Enterprise-level infrastructure without the complexity.</p>
+          </div>
+          <hr style="color: #ffaa00; height: 2px; background-color: #ffaa00; border: none;">
+          <div class="feature">
+            <img class="feature-icon" src="l4.png" alt="Custom-coded backtests icon">
+            <p class="feature-text">Strategic insights that separate winners from losers.</p>
+          </div>
+        </div>
+
+        <!-- Images Grid -->
+        <div class="col-md-6 image-grid">
+          <div class="row">
+            <div class="col-6 mb-3">
+              <img src="1.png" alt="Image 1">
+            </div>
+            <div class="col-6 mb-3">
+              <img src="2.png" alt="Image 2">
+            </div>
+            <div class="col-6 mb-3">
+                <img src="1.png" alt="Image 1">
+              </div>
+              <div class="col-6 mb-3">
+                <img src="2.png" alt="Image 2">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Text -->
+      
+    </div>
+    <p class="bottom-text w-100 text-start">
+        My service bridges the gap between retail and institutional-grade strategy testing, giving you confidence before you trade.
+      </p>
+  </section>
+
+  <section class="how-it-works-section">
+    <div class="container py-5">
+      <h2>How <span style="color: white;">It Works</span></h2>
+      <div class="row gy-4">
+        <!-- Step 1 -->
+        <div class="col-md-4">
+          <div class="step-card py-sm-5 py-5">
+            <div class="step-number">1.</div>
+            <div class="step-description px-md-3 px-lg-3 px-xl-5 px-5 text-start">
+                <strong>Schedule a Call-</strong> <br>We’ll discuss your strategy and goals.
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="col-md-4">
+          <div class="step-card py-sm-5 py-5">
+            <div class="step-number">2.</div>
+            <div class="step-description px-md-0 px-lg-3 px-xl-5 px-5 text-start">
+                <strong>Build Your Backtest –</strong> <br>Handle the coding, testing, and cloud setup.
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="col-md-4">
+            <div class="step-card px-md-0 px-5 py-sm-5 py-5">
+              <div class="step-number">3.</div>
+              <div class="step-description px-md-4 px-lg-3 px-xl-5 px-5 text-start">
+                <strong>Evaluate Your Results –</strong> <br>Understand your strategy's strengths and weaknesses.
+              </div>
+            </div>
+          </div>
+    </div>
+  </section>
+
+  <section class="expert-section  h-100">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Left Column: Text -->
+        <div class="col-md-8">
+          <h2><span class="" style="color: #000;">Meet Your Backtesting</span> <span>Expert</span></h2>
+          <p class="w-100 pe-5 mt-5">
+            Tired of being on the wrong side of trades? I'm [Your Name], a quantitative researcher who turns retail traders into informed
+            market participants. Through advanced backtesting and data
+            analysis, I provide you with the same powerful tools and insights
+            that institutional traders use daily. My mission? To help traders
+            make educated decisions backed by real data, not gut feelings.
+          </p>
+        </div>
+        <!-- Right Column: Image -->
+        <div class="col-md-4 text-center">
+          <img
+            src="profile.png"
+            alt="Backtesting Expert"
+            class="img-fluid expert-image"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  
+<section class="skip-backtesting-section">
+    <div class="container">
+      <!-- Title -->
+      <h2 class="text-start" style="color: white;">Why You Can’t Afford to Skip <span>Backtesting</span></h2>
+      
+      <!-- Subtitle -->
+      <p class="highlight text-start mt-4">The Brutal Reality <span style="color:white">– The 90-90-90 Rule</span></p>
+      
+      <!-- Description -->
+      <p class="skip-backtesting-text text-start">
+        90% of traders lose 90% of their money within 90 days.
+      </p>
+
+      <p class="skip-backtesting-text text-start w-100 mt-4 mb-5">
+        US brokers made $57.4 billion in 2023 from retail trader losses. Don’t be part of their next payday.
+      </p>
+      
+      <!-- Call-to-Action Button -->
+      <a href="#" class="btn cta-button mt-4">Stop Giving Money Away – Book a Call</a>
+    </div>
+  </section>
+  <!-- Bootstrap JS -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"
+  ></script>
+</body>
+</html>
